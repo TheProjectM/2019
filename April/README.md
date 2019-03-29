@@ -1,19 +1,21 @@
 # Docker
 
-__[toc]__
-
 ## Get started with Docker
----
+
 ### **Part1: Orientation**
 
 - check docker version  
     **`docker --version`**
     
+    ```
     Docker version 18.09.2, build 6247962
+    ```
+
 - get more imformation about current version  
     **`docker info / docker version`**
 
-    ```Client: Docker Engine - Community
+    ```
+    Client: Docker Engine - Community
     Version:           18.09.2
     API version:       1.39
     Go version:        go1.10.8
@@ -22,6 +24,7 @@ __[toc]__
     OS/Arch:           windows/amd64
     Experimental:      false
     ```
+    
 - test docker installation  
     **`docker run hello-world`**
 
