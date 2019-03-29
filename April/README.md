@@ -24,7 +24,7 @@
     OS/Arch:           windows/amd64
     Experimental:      false
     ```
-    
+
 - test docker installation  
     **`docker run hello-world`**
 
@@ -73,7 +73,6 @@
 
 #### recap and cheat sheet
 
-    ```
     list docker commands 
         docker 
         docker container --help
@@ -93,4 +92,3 @@
         docker container ls
         docker container ls (-a/-all) 
         docker container ks -aq
-    ```
