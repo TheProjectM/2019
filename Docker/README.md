@@ -1,6 +1,6 @@
-# Docker
+# **Docker**
 
-## Get started with Docker
+## **Get started with Docker**
 
 ### **Part1: Orientation**
 
@@ -95,7 +95,7 @@
 
 ### **Part2: Containers**
 
-For flask demo
+For Flask demo
 1. define a contatiner with `Dockerfile`
 2. create the `requirements.txt`
 3. create `app.py`
@@ -107,5 +107,13 @@ For flask demo
 9. stop docker container using `docker container stop <CONTAINER ID>`
 
 Share image
-1. We need a Docker account, sign up one at [hub.docker.com](https://hub.docker.com/)
-2. login docker with `docker login`
+1. You will need a Docker account, sign up one at [hub.docker.com](https://hub.docker.com/)
+2. Login docker with `docker login` and code in the username and password.
+3. Tag the image: the syntax of the command is `docker tag image username/repository:tag`, this step is just for associating the local image with a repository on a registry, after the previous command is done, you can use the `docker image ls` command to see the newly tagged image `username/repository  tag`
+4. Publish the image: upload the tagged image to the repository, the syntax is `docker push username/repository:tag`. Once complete, the results of this upload are publicly available.
+5. Pull and run the image from remote repository: now you can run your app using `docker run -p 4000:80 username/repository:tag`.
+6. no matter where docker run executes, it pulls your image. along with Python and all the dependencies from `requirements.txt`, and run your code. it all travels together in a neat little package, and you don't need to install anything on the host machine for Docker to run it.
+
+#### Recap and cheat sheet
+
+[Here is the terminal recording of what was covered on this page](https://asciinema.org/a/blkah0l4ds33tbe06y4vkme6g)
