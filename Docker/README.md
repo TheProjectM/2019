@@ -117,3 +117,22 @@ Share image
 #### Recap and cheat sheet
 
 [Here is the terminal recording of what was covered on this page](https://asciinema.org/a/blkah0l4ds33tbe06y4vkme6g)
+
+Here is a list of basic Docker commands from part2, and some related ones if you would like to explore a bit before moving on.
+
+    docker build -t friendlyhello .      # create image using this dir's Dockerfile
+    docker run -p 4000:80 friendlyhello      # run "friendlyhello" mapping port 4000 to 80
+    docker run -d -p 4000:80 friendlyhello      # the same as above but in detached mode
+    docker container ls    # list all running containers
+    docker container ls -a      # list all containers, even the host not running
+    docker container stop <hash>    # gracefully stop the specified container
+    docker container kill <hash>    # force shutdown the specified container
+    docker container rm <hash>      # remove specified container from this machine
+    docker container rm $(docker container ls -a -q)    # remove all containers
+    docker image ls -a      # list all images on this machine
+    docker image rm <image id>      # remove specified image from this machine
+    docker image rm $(docker image ls -a -q)    # remove all images from this machine
+    docker login    # log in hub.docker.com with your username and password
+    docker tag <image> username/repository:tag      # tag <image> for upload to registry
+    docker push username/repository:tag     # upload tagged image to username/repository:tag
+    docker run username/repository:tag     # run image from a registory
