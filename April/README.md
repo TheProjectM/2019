@@ -92,3 +92,20 @@
         docker container ls
         docker container ls (-a/-all) 
         docker container ks -aq
+
+### **Part2: Containers**
+
+For flask demo
+1. define a contatiner with `Dockerfile`
+2. create the `requirements.txt`
+3. create `app.py`
+4. build the app at the top level of the new directory `docker build --tag=friendlyhello`
+5. then you can list the docker image with `docker image ls`
+6. run the app using `docker run -p 4000:80 friendlyhello` -p for port mapping.
+7. run the app in the background, in the detached mode with `-d` option.`docker run -d -p 4000:80 friendlyhello`
+8. use `docker container ls` to list the running containers.
+9. stop docker container using `docker container stop <CONTAINER ID>`
+
+Share image
+1. We need a Docker account, sign up one at [hub.docker.com](https://hub.docker.com/)
+2. login docker with `docker login`
