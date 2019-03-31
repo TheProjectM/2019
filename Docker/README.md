@@ -141,17 +141,17 @@ Here is a list of basic Docker commands from part2, and some related ones if you
 
 #### Introduction
 
-    In this part, we scale application and enable load-balancing. To do this, we need to go one level up in the hierarchy of a distributed application: the service.
+In this part, we scale application and enable load-balancing. To do this, we need to go one level up in the hierarchy of a distributed application: the service.
 
 #### About services
 
-    In a distributed application, different pieces of the app are called "services". 
-    Services are really just "containers in production". A service only run one image.
-    It's easy to define, run, and scale services with the Docker platform -- just write a `docker-compose.yml` file.
+In a distributed application, different pieces of the app are called "services".  
+Services are really just "containers in production". A service only run one image.  
+It's easy to define, run, and scale services with the Docker platform -- just write a `docker-compose.yml` file.
 
 #### Your first `docker-compose.yml` file
 
-    A `docker-compose.yml` file is a YAML file that defines how Docker containers should beheave in produciton.
+A `docker-compose.yml` file is a YAML file that defines how Docker containers should beheave in produciton.
 
 **`docker-compose.yml`**
 
@@ -244,4 +244,5 @@ Some commands to explore at this stage:
     docker inspect <task or container>      # inspect task or container
     docker container ls -q      # list container IDs
     docker stack rm <stackname or appname>      # Tear down an appliation
-    docker swarm leave --force     # Tear down a single node swarm from the manager
+    docker swarm leave --force     # Tear down a single node swarm from the manager.
+
