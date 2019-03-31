@@ -246,3 +246,24 @@ Some commands to explore at this stage:
     docker stack rm <stackname or appname>      # Tear down an appliation
     docker swarm leave --force     # Tear down a single node swarm from the manager.
 
+
+### **Part4: Swarm**
+
+#### Introduction
+
+In part3, you took an app you wrote in part2, and defined how it should run in produciton by turning it into a service, scaling it up to 5x in the process.
+
+Here in part4, you deploy this application onto a cluster, running it on multiple machines.Multi-container, multi-machine applications are made possible by joining multiple machines into a "Dockerized" cluster called a **swarm**.
+
+#### Understanding Swarm clusters
+
+A swarm is a group of machines that are running Docker and joined into a cluster. After that has happened, you continue to run the Docker commands you're used to, but how they are executed on a cluster by a **swarm manager**. The machines in a swarm can be physical or virtual. After joining a swarm, they are reffered to as **nodes**.
+
+Swram managers can use sereval strategies to run containers, such as "emptiest node" --which fills the least utilized machines with containers.
+Or "global", which ensures that each machine gets exactly one instance of the specified container. You instruct the swarm manager to use these strategies in the Compose file, just like the one you have already been using.
+
+Swarm manageers are the only machines in a swarm that can execute your commands, or authorize other machines to join the swarm as **workers**.
+Workers are just there to provide capacity and do not have the authority to tell any other machine what it can and cannot do.
+
+Up until now, you have been using Docker in s single-host mode on your local machine. But Docker also cdan be switched into **swarm mode**, and that is what enables the use of swarms. Enabling swarm mode instantly makes the current machine a swarm manager. From then on, Docker runs the commnads you execute on the swarm you are managing, rather than just on the current machine.
+
