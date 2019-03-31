@@ -166,7 +166,7 @@ services:
         limits:
           cpus: "0.1"
           memory: 50M
-      restart_poolicy:
+      restart_policy:
         condition: on-failure
     ports:
       - "4000:80"
@@ -179,8 +179,69 @@ networks:
 #### Run your new load-balalce app
 
 Before we can use the `docker stack deploy` command we first run:
+
     docker swarm init
 
-Now run it with the name `getstartedlab`
+Now run it with the name `getstartedlab`. One Single service stack is running 5 containers of our deployed image on one host.
+
     docker stack deploy -c docker-compost.yml getstartedlab
     
+
+
+Get the service ID for the one service in the application.
+
+    docker service ls
+
+Alternatively, for `docker service ls` is `docker stack services <stack_name>` 
+
+    docker stack services getstartedlab
+
+A single container running in a service is called a **task**. Task are given unique IDs that numerically increment, up to the number of `replicas` you defined in docker-compose.yml, list the tasks of your service using `docker service ps <service_name>`:
+
+    docker service ps getstartedlab_web
+
+Tasks also show up if you just list all the containers on your system, though that is not filtered by service:
+
+    docker container ls -q
+
+Now the app is running in the load-balanced mode with 5 containers. every time you visit `http://localhost:4000` you will get a different hostname against the pervious one.
+
+To view all tasks of a stack, you can run `docker stack ps <stack_name/app_name>
+
+    docker stack ps getstartedlab
+
+#### Scale the app
+
+You can scale the app by changing the `replicas` value in docker-compose.yml, saving the change, and re-running the `docker stack deploy` command :
+
+    docker stack deploy -c docker-compose.yml getstartedlab
+
+Docker performs an in-place update, no need to tear down first or kill any containers.
+
+#### Tear down the app and the swarm
+
+- Take the app down with `docker stack rm`:
+  
+        docker stack rm getstartedlab
+
+- Take down the swarm:
+  
+        docker swarm leave --force 
+
+It's as easy as that to stand up and scale your app with Docker.
+
+#### Recap and cheat sheet
+[Here's a terminal recording of what was covered on part3: Services](https://asciinema.org/a/b5gai4rnflh7r0kie01fx6lip)
+
+To recap, typing `docker run` is simple enough, the true implementation of a container in production is running it as a service. Services codify a container's beheavior in a Compose file, and this file can be used to scale, limit, and redeploy our app, Changes to the service can be applied in place, as it runs, using the same command that launched the service:
+
+Some commands to explore at this stage:
+
+    docker stack ls     # list stacks or apps
+    docker stack deploy -c <composefile> <appname>      # run the specified Compose file
+    docker service ls     # list runnings services associated with an app
+    docker servics ps <service>     # list tasks associated with an app
+    docker inspect <task or container>      # inspect task or container
+    docker container ls -q      # list container IDs
+    docker stack rm <stackname or appname>      # Tear down an appliation
+    docker swarm leave --force     # Tear down a single node swarm from the manager
