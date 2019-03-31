@@ -156,7 +156,7 @@ Here is a list of basic Docker commands from part2, and some related ones if you
 **`docker-compose.yml`**
 
 ```
-version: 3
+version: "3"
 services:
   web:
     image: srealzhang/aiixm:part2
@@ -175,3 +175,12 @@ services:
 networks:
   webnet:
 ```
+
+#### Run your new load-balalce app
+
+Before we can use the `docker stack deploy` command we first run:
+    docker swarm init
+
+Now run it with the name `getstartedlab`
+    docker stack deploy -c docker-compost.yml getstartedlab
+    
