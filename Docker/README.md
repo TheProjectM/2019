@@ -389,3 +389,4 @@ You can access your app from the IP address of either `myvm1` or `myvm2`.
 The network you created is shared between then and load-balancing. Run `docker-machine ls` to get your VMs' IP addresses and visit either of them on a browser, hitting refresh you will get all the containers IDs with a load-balancing cycling.
 
 **Routing mesh ingress network explain**
+<img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/ingress-routing-mesh.png">
