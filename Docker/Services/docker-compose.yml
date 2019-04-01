@@ -3,7 +3,7 @@ services:
   web:
     image: srealzhang/aiixm:part2
     deploy:
-      replicas: 2
+      replicas: 5
       resources: 
         limits:
           cpus: "0.1"

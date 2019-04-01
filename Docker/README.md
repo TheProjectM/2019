@@ -267,3 +267,125 @@ Workers are just there to provide capacity and do not have the authority to tell
 
 Up until now, you have been using Docker in s single-host mode on your local machine. But Docker also cdan be switched into **swarm mode**, and that is what enables the use of swarms. Enabling swarm mode instantly makes the current machine a swarm manager. From then on, Docker runs the commnads you execute on the swarm you are managing, rather than just on the current machine.
 
+#### Set up your swarm
+
+A swarm is made up of multiple nodes, which can be physical and virtual machines. The basic concept is simple enough: run `docker swarm init` to enable swarm mode and make your currnet machine a swarm manager, then run `docker swarm join` on other machines to have them join the swarm as workers. 
+
+**Create a cluster**
+
+Create local virtual machine using Hyper-V on Windows 10:
+
+1. Launch Hyter-V Manager
+2. Click **Virtual Switch Manager** in the right-hand menu
+3. Click **Create Virtual Switch** of type External
+4. Give it the name `myswitch`, and check the box to share your host machine's active network adapter
+
+now create a couple of VMs using our node management tool, `docker-machine`
+
+    docker-machine create -d hyperv --hyperv-virtual-switch "myswitch" myvm1
+    docker-machine create -d hyperv --hyperv-virtual-switch "myswitch" myvm2
+
+**List the VMs and get their ip addresses**
+
+Now we have two VMs created, named `myvm1` and `myvm2`
+
+    docker-machine ls
+
+here is an example output from my terminal
+
+```
+NAME    ACTIVE   DRIVER   STATE     URL                        SWARM   DOCKER     ERRORS
+myvm1   -        hyperv   Running   tcp://192.168.1.218:2376           v18.09.3
+myvm2   -        hyperv   Running   tcp://192.168.1.219:2376           v18.09.3
+```
+
+**Initialize the searm and add nodes**
+
+The first machine acts as the manager, which executes management commands and authenciates workers to join the swarm, and the second is a worker.
+
+You can send commands to your VMs using `docker-machine ssh`. instruct myvm1 to become a swarm manager with `docker swarm init` and the output should like this"
+
+    $ docker-machine ssh myvm1 "docker swarm init --advertise-addr 192.168.1.218"
+
+    Swarm initialized: current node (b8ukc9tbkjwgl4g9c00ok5brk) is now a manager.
+    To add a worker to this swarm, run the following command:
+    docker swarm join --token <token> 192.168.1.218:2377
+    To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+
+> Port 2377 and 2376 :  
+> 2377 is the default port, you can run `docker swarm init` and `docker swarm join` command through 2377  
+> 2376 port returned by command `docker-machine ls` is the Docker daemon port.
+
+> When having trouble using ssh command, try to use `--native-ssh` flag  
+> `docker-machine --native-ssh ssh myvm1 ...`
+
+As you can see, the response to docker swarm init cantains a pre-configured `docker swarm join` command for you to run on any nodes you want to add. Copy this command, and send it to `myvm2` via `docker-machine ssh` to have `myvm2` join your new swarm as a worker: 
+
+    $ docker swarm join --token <token> 192.168.1.218:2377
+
+    This node joined a swarm as a worker.
+
+Congratulations, you have created your first swarm!
+Run `docker node ls` on the manager to view the nodes in this swarm:
+
+    $ docker-machine ssh myvm1 "docker node ls"
+
+    ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+    xhnj4d1fxlntazp9h6a1e4nn7 *   myvm1               Ready               Active              Leader              18.09.3
+    3nw87xb2sjtyi1p9b2mkb1ofo     myvm2               Ready               Active                                  18.09.3
+
+> Remember to use `docker swarm leave` command to leave the swarm for the worker machine, for the last manager machine add `--force` to leave the swarm.
+
+**Deploy your app on the swarm clustre**
+
+The hard part is over. Only swarm manager like `myvm1` execute Docker commands, workers are just for capacity.
+
+**Configure a `docker-machine` shell to the swarm manager**
+
+run **docker-machine env myvm1** command and you will get the result below on Windows 10 :
+
+    $ docker-machine env myvm1
+
+    # Run this command to configure your shell:
+    # & "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression
+
+and then run the **& "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression**
+
+    $ & "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression
+    
+Run `docker-machine ls` to make sure that `myvm1` is the active machine as indicated by the asterisk `*` next to it.
+
+    $ docker-machine ls 
+    NAME    ACTIVE   DRIVER   STATE     URL                        SWARM   DOCKER     ERRORS
+    myvm1   *        hyperv   Running   tcp://192.168.1.218:2376           v18.09.3
+    myvm2   -        hyperv   Running   tcp://192.168.1.219:2376           v18.09.3
+
+**Deploy the app on the warm manager**
+
+Just run `docker stack deploy -c docker-compose.yml getstartedlab` as a normal machine, **it will take a few seconds for the service fully started**, and use command `docker stack ps getstartedlab` to check the service status.
+
+    $ docker stack deploy -c docker-compose.yml getstartedlab
+
+    Creating network getstartedlab_webnet
+    Creating service getstartedlab_web
+
+    $ docker stack ps getstartedlab
+
+    ID                  NAME                  IMAGE                    NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
+    ephrkk1su4mg        getstartedlab_web.1   username/repository:tag   myvm2               Running             Running 14 minutes ago
+    nr9i2tphazoq        getstartedlab_web.2   username/repository:tag   myvm1               Running             Running 13 minutes ago
+    v3kppovrwkzb        getstartedlab_web.3   username/repository:tag   myvm2               Running             Running 12 minutes ago
+    4ix8t7p4ch8p        getstartedlab_web.4   username/repository:tag   myvm1               Running             Running 12 minutes ago
+    96o17pft149n        getstartedlab_web.5   username/repository:tag   myvm2               Running             Running 12 minutes ago
+
+> we can use `docker-machine ssh` and `docker-machine env` to send commands to the VMs. `docker-machine ssh` is more like a one-touch mode; whereas `docker-machine env` is more like a interactive mode. because the later one is link the currnet shell to the VM's Docker daemon.  
+>so the next question is how to determine "where are you in?". It can be addressed using command `docker-machine ls` in the **ACTIVE** column, the `*` shows where you are. if all the column are `-`, then you are not in any VMs.
+
+**Accessing your cluster**
+
+You can access your app from the IP address of either `myvm1` or `myvm2`.
+
+The network you created is shared between then and load-balancing. Run `docker-machine ls` to get your VMs' IP addresses and visit either of them on a browser, hitting refresh you will get all the containers IDs with a load-balancing cycling.
+
+**Routing mesh ingress network explain**
