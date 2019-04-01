@@ -388,5 +388,88 @@ You can access your app from the IP address of either `myvm1` or `myvm2`.
 
 The network you created is shared between then and load-balancing. Run `docker-machine ls` to get your VMs' IP addresses and visit either of them on a browser, hitting refresh you will get all the containers IDs with a load-balancing cycling.
 
-**Routing mesh ingress network explain**
+**Ingress routing mesh network explain**
 <img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/ingress-routing-mesh.png">
+
+
+**Iterating and scaling your app**
+
+From here you can do everything you learned about in part2 and part3.
+
+Scale the app by changing the `docker-compose.yml` file
+
+You can join any mahine, physical and virtual, to this swarm, using the same `docker swarm join` command you used on `myvm2`, and capacity is added to your cluster. Just run `docker stack deploy` afterwards, and your app can take advantage of the new resources.
+
+#### Cleanup and reboot
+
+**Stacks and swarms**
+
+You can tear down the stack with `docker stack rm`. for example:
+
+    docker stack rm getstartedlab
+
+As for swarms in the VMs, you can use `docker swarm leave` for workers and `docker swarm leave --force` for the last manager.
+
+**Unsetting docker-machine shell varibale settings**
+
+You can unset the `docker-machine` environment variables in your current shell with the given command.
+
+On **Mac or Linux** the command is :
+
+    docker-machine env -u
+
+On **Windows** the command is :
+
+    & "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env -u | Invoke-Expression
+    
+when you run `docker-machine env -u` command on windows, you will get the above command at the end of the result.
+
+**Restarting Dcoker machines**
+
+You can stop the docker machine using command `docker-machine stop <machine-name>`
+
+    docker-machine stop myvm1
+    docker-machine stop myvm2
+
+use command `docker-machine ls` to check the Docker created VMs status:
+
+    $ docker-machine ls
+
+    NAME    ACTIVE   DRIVER   STATE     URL   SWARM   DOCKER    ERRORS
+    myvm1   -        hyperv   Stopped                 Unknown
+    myvm2   -        hyperv   Stopped                 Unknown
+
+To restart a machine that's stopped, run:
+
+    docker-machine start <machine-name>
+
+
+#### Recap and cheat sheet
+[Here is the terminal recording of what was covered on this part.](https://asciinema.org/a/113837)
+
+In part4 you learned what a swarm is, how nodes in swarms can be managers or workers, created a swarm, and deployed an applocation on it. You saw that core Docker commands didn't change from part 3, they just had to be targeted to run on a swarm master. You also saw the power of Docker's networking in action, which kept load-balancing requests across containers, even though they were running on different machines. Finally, you learned how to iterate and scale your app on a cluster.
+
+Here are some commands you might like to run to interact with your swarm and your VMs a bit:
+
+    docker-machine create --driver virtualbox myvm1     # create a VM (Mac,Win7, Linux)
+    docker-machine create -d hyperv --hyperv-virtual-switch "myswitch" myvm1    # Win10
+    docker-machine env myvm1    # view basick information about node
+    docker-machine ssh myvm1 "docker node ls"       # inspect a node
+    docker-machine ssh myvm1 "docker node inspect <node ID>
+    docker-machine ssh myvm1 "docker swarm join-token -q worker"    #view join token
+    docker-machine ssh myvm1    # open a ssh session with the VM; type "exit" to end
+    docker node ls      # view nodes in swarm (while logged on to manager)
+    docker-machine ssh myvm2 "docker swarm leave"   # make the worker leave the swarm
+    docker-machine ssh myvm1 "docker swarm leave --force/-f"   # make the master leave the swarm and kill the swarm.
+    docker-machine ls   # list VMs, asterisk shows which VM this shell is talking to 
+    docker-machine start myvm1      # start a VM which is not running
+    docker-machine env myvm1    # show environment variables and command for connecting to myvm1
+    docker-machine env myvm1    # Linux and Mac command to connect shell to myvm1
+    & "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression       # Windows command to connect shell to myvm1
+    docker stack deploy -c <Compose-file> <app-name>    # deploy an app, command shell mast be set to talk to manager(myvm1), use local Compose file
+    docker-machine scp docker-compose.yml myvm1:~   # copy file to node's home dir (only required if you use ssh to connect to manager and deploy app)
+    docker-machine ssh myvm1 "docker stack deploy -c <Compose-file> <app-name>"     # Deploy an app using ssh (you must have first copied the Compose file to myvm1)
+    docker-machine env -u/--unset       # disconnect shell from VMs, use native Docker
+    docker-machine stop $(docker-machine ls -q)     # stop all running VMs
+    docker-machine rm $(docker-machine ls -q)       # delete all VMs and their task images
+

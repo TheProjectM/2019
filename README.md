@@ -11,4 +11,4 @@
 3. JavaScript
 4. Kubernetes
 5. Vue
-5. Golang
+6. Golang
