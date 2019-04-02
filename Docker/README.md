@@ -611,19 +611,28 @@ This source of truth has two components:
 - The volume you created that lets the container access `./data` (on the host) as `/data` (inside the Redis container). While containers come and go, the files stored on `./data` on the specified host persists, enabling continuity.
 You are ready to deploy your new Redis-using stack.
 
+
 2.Create a ./data directory on the manager:
    
    docker-machine ssh myvm1 "mkdir ./data"
+
 
 3.Make sure your shell is configured to talk to `myvm1` (use `docker-machine to verify that)
 - Run `docker-machine ls` to list machines and make sure you are connected to `myvm1`, as indicated by an asterisk next to it.
 - if needed, re-run `docker-machine env myvm1`, then run the given command to configure the shell.
 
+
 4.Run `docker stack deploy` one more time.
    
    docker stack deploy -c docker-compose.yml getstartedlab
 
+
 5.Run `docker service ls` to verify that the three services are running as expected.
+
 
 6.Check the web page at one of your nodes. and take a look at the results of the visitor counter, which is now live and storing information on Redis.
 <img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-redis.png">
+
+Also check the visualizer of the manager node.
+<img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-visualizer-with-redis.png">
+
