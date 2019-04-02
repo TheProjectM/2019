@@ -598,4 +598,32 @@ The visualizer is a standalone service that can run in any app that includes it 
 
     ```
 
-Redis has an official image in the Docker library and has been granted the short `image` name of just `redis`, so no `username/repo` notation here. The Redis port, 6379, has been pre-configured by Redis to be exposed from the container to the host, and here in Compose file we expose it from the host to the world, so you can actually enter the IP for any of your nodes
+Redis has an official image in the Docker library and has been granted the short `image` name of just `redis`, so no `username/repo` notation here. The Redis port, 6379, has been pre-configured by Redis to be exposed from the container to the host, and here in Compose file we expose it from the host to the world, so you can actually enter the IP for any of your nodes into Redis Desktop Manager and manage this Redis instance, if you so choose.
+
+Most importantly, there are a couple of things in the `redis` specification that make data persist between deployments of this stack:
+- `redis` always runs on the manager, so it's always using the same filesystem.
+- `redis` accesses an arbitrary directory in the host's file system as /data inside the container, which is where Redis stores data.
+
+Together, this is creating a "source of truth" in your host's physical filesystem for the Redis data. Without this, Redis would store its data in `/data` inside the container's filesystem, which would get wiped out if that container were ever redeployed.
+
+This source of truth has two components:
+- The placement constraint you put on the Redis service, ensuring that it always uses the same host.
+- The volume you created that lets the container access `./data` (on the host) as `/data` (inside the Redis container). While containers come and go, the files stored on `./data` on the specified host persists, enabling continuity.
+You are ready to deploy your new Redis-using stack.
+
+2. Create a ./data directory on the manager:
+   
+   docker-machine ssh myvm1 "mkdir ./data"
+
+3. Make sure your shell is configured to talk to `myvm1` (use `docker-machine to verify that)
+- Run `docker-machine ls` to list machines and make sure you are connected to `myvm1`, as indicated by an asterisk next to it.
+- if needed, re-run `docker-machine env myvm1`, then run the given command to configure the shell.
+
+4. Run `docker stack deploy` one more time.
+   
+   docker stack deploy -c docker-compose.yml getstartedlab
+
+5. Run `docker service ls` to verify that the three services are running as expected.
+
+6. Check the web page at one of your nodes. and take a look at the results of the visitor counter, which is now live and storing information on Redis.
+<img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-redis.png">
