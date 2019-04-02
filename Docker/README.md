@@ -11,7 +11,7 @@
     Docker version 18.09.2, build 6247962
     ```
 
-- get more imformation about current version  
+- get more information about current version  
     **`docker info / docker version`**
 
     ```
@@ -96,7 +96,7 @@
 ### **Part2: Containers**
 
 For Flask demo
-1. define a contatiner with `Dockerfile`
+1. define a container with `Dockerfile`
 2. create the `requirements.txt`
 3. create `app.py`
 4. build the app at the top level of the new directory `docker build --tag=friendlyhello`
@@ -135,7 +135,7 @@ Here is a list of basic Docker commands from part2, and some related ones if you
     docker login    # log in hub.docker.com with your username and password
     docker tag <image> username/repository:tag      # tag <image> for upload to registry
     docker push username/repository:tag     # upload tagged image to username/repository:tag
-    docker run username/repository:tag     # run image from a registory
+    docker run username/repository:tag     # run image from a registry
 
 ### **Part3: Services**
 
@@ -151,7 +151,7 @@ It's easy to define, run, and scale services with the Docker platform -- just wr
 
 #### Your first `docker-compose.yml` file
 
-A `docker-compose.yml` file is a YAML file that defines how Docker containers should beheave in produciton.
+A `docker-compose.yml` file is a YAML file that defines how Docker containers should behave in production.
 
 **`docker-compose.yml`**
 
@@ -176,7 +176,7 @@ networks:
   webnet:
 ```
 
-#### Run your new load-balalce app
+#### Run your new load-balance app
 
 Before we can use the `docker stack deploy` command we first run:
 
@@ -233,17 +233,17 @@ It's as easy as that to stand up and scale your app with Docker.
 #### Recap and cheat sheet
 [Here's a terminal recording of what was covered on part3: Services](https://asciinema.org/a/b5gai4rnflh7r0kie01fx6lip)
 
-To recap, typing `docker run` is simple enough, the true implementation of a container in production is running it as a service. Services codify a container's beheavior in a Compose file, and this file can be used to scale, limit, and redeploy our app, Changes to the service can be applied in place, as it runs, using the same command that launched the service:
+To recap, typing `docker run` is simple enough, the true implementation of a container in production is running it as a service. Services codify a container's behavior in a Compose file, and this file can be used to scale, limit, and redeploy our app, Changes to the service can be applied in place, as it runs, using the same command that launched the service:
 
 Some commands to explore at this stage:
 
     docker stack ls     # list stacks or apps
-    docker stack deploy -c <composefile> <appname>      # run the specified Compose file
+    docker stack deploy -c <Compose-file> <app-name>      # run the specified Compose file
     docker service ls     # list runnings services associated with an app
-    docker servics ps <service>     # list tasks associated with an app
+    docker services ps <service>     # list tasks associated with an app
     docker inspect <task or container>      # inspect task or container
     docker container ls -q      # list container IDs
-    docker stack rm <stackname or appname>      # Tear down an appliation
+    docker stack rm <stack-name or app-name>      # Tear down an application
     docker swarm leave --force     # Tear down a single node swarm from the manager.
 
 
@@ -251,31 +251,31 @@ Some commands to explore at this stage:
 
 #### Introduction
 
-In part3, you took an app you wrote in part2, and defined how it should run in produciton by turning it into a service, scaling it up to 5x in the process.
+In part3, you took an app you wrote in part2, and defined how it should run in production by turning it into a service, scaling it up to 5x in the process.
 
 Here in part4, you deploy this application onto a cluster, running it on multiple machines.Multi-container, multi-machine applications are made possible by joining multiple machines into a "Dockerized" cluster called a **swarm**.
 
 #### Understanding Swarm clusters
 
-A swarm is a group of machines that are running Docker and joined into a cluster. After that has happened, you continue to run the Docker commands you're used to, but how they are executed on a cluster by a **swarm manager**. The machines in a swarm can be physical or virtual. After joining a swarm, they are reffered to as **nodes**.
+A swarm is a group of machines that are running Docker and joined into a cluster. After that has happened, you continue to run the Docker commands you're used to, but how they are executed on a cluster by a **swarm manager**. The machines in a swarm can be physical or virtual. After joining a swarm, they are referred to as **nodes**.
 
-Swram managers can use sereval strategies to run containers, such as "emptiest node" --which fills the least utilized machines with containers.
+Swarm managers can use serval strategies to run containers, such as "emptiest node" --which fills the least utilized machines with containers.
 Or "global", which ensures that each machine gets exactly one instance of the specified container. You instruct the swarm manager to use these strategies in the Compose file, just like the one you have already been using.
 
-Swarm manageers are the only machines in a swarm that can execute your commands, or authorize other machines to join the swarm as **workers**.
+Swarm managers are the only machines in a swarm that can execute your commands, or authorize other machines to join the swarm as **workers**.
 Workers are just there to provide capacity and do not have the authority to tell any other machine what it can and cannot do.
 
-Up until now, you have been using Docker in s single-host mode on your local machine. But Docker also cdan be switched into **swarm mode**, and that is what enables the use of swarms. Enabling swarm mode instantly makes the current machine a swarm manager. From then on, Docker runs the commnads you execute on the swarm you are managing, rather than just on the current machine.
+Up until now, you have been using Docker in s single-host mode on your local machine. But Docker also can be switched into **swarm mode**, and that is what enables the use of swarms. Enabling swarm mode instantly makes the current machine a swarm manager. From then on, Docker runs the commands you execute on the swarm you are managing, rather than just on the current machine.
 
 #### Set up your swarm
 
-A swarm is made up of multiple nodes, which can be physical and virtual machines. The basic concept is simple enough: run `docker swarm init` to enable swarm mode and make your currnet machine a swarm manager, then run `docker swarm join` on other machines to have them join the swarm as workers. 
+A swarm is made up of multiple nodes, which can be physical and virtual machines. The basic concept is simple enough: run `docker swarm init` to enable swarm mode and make your current machine a swarm manager, then run `docker swarm join` on other machines to have them join the swarm as workers. 
 
 **Create a cluster**
 
 Create local virtual machine using Hyper-V on Windows 10:
 
-1. Launch Hyter-V Manager
+1. Launch Hyper-V Manager
 2. Click **Virtual Switch Manager** in the right-hand menu
 3. Click **Create Virtual Switch** of type External
 4. Give it the name `myswitch`, and check the box to share your host machine's active network adapter
@@ -299,9 +299,9 @@ myvm1   -        hyperv   Running   tcp://192.168.1.218:2376           v18.09.3
 myvm2   -        hyperv   Running   tcp://192.168.1.219:2376           v18.09.3
 ```
 
-**Initialize the searm and add nodes**
+**Initialize the swarm and add nodes**
 
-The first machine acts as the manager, which executes management commands and authenciates workers to join the swarm, and the second is a worker.
+The first machine acts as the manager, which executes management commands and authenticates workers to join the swarm, and the second is a worker.
 
 You can send commands to your VMs using `docker-machine ssh`. instruct myvm1 to become a swarm manager with `docker swarm init` and the output should like this"
 
@@ -320,7 +320,7 @@ You can send commands to your VMs using `docker-machine ssh`. instruct myvm1 to 
 > When having trouble using ssh command, try to use `--native-ssh` flag  
 > `docker-machine --native-ssh ssh myvm1 ...`
 
-As you can see, the response to docker swarm init cantains a pre-configured `docker swarm join` command for you to run on any nodes you want to add. Copy this command, and send it to `myvm2` via `docker-machine ssh` to have `myvm2` join your new swarm as a worker: 
+As you can see, the response to docker swarm init contains a pre-configured `docker swarm join` command for you to run on any nodes you want to add. Copy this command, and send it to `myvm2` via `docker-machine ssh` to have `myvm2` join your new swarm as a worker: 
 
     $ docker swarm join --token <token> 192.168.1.218:2377
 
@@ -337,7 +337,7 @@ Run `docker node ls` on the manager to view the nodes in this swarm:
 
 > Remember to use `docker swarm leave` command to leave the swarm for the worker machine, for the last manager machine add `--force` to leave the swarm.
 
-**Deploy your app on the swarm clustre**
+**Deploy your app on the swarm cluster**
 
 The hard part is over. Only swarm manager like `myvm1` execute Docker commands, workers are just for capacity.
 
@@ -379,7 +379,7 @@ Just run `docker stack deploy -c docker-compose.yml getstartedlab` as a normal m
     4ix8t7p4ch8p        getstartedlab_web.4   username/repository:tag   myvm1               Running             Running 12 minutes ago
     96o17pft149n        getstartedlab_web.5   username/repository:tag   myvm2               Running             Running 12 minutes ago
 
-> we can use `docker-machine ssh` and `docker-machine env` to send commands to the VMs. `docker-machine ssh` is more like a one-touch mode; whereas `docker-machine env` is more like a interactive mode. because the later one is link the currnet shell to the VM's Docker daemon.  
+> we can use `docker-machine ssh` and `docker-machine env` to send commands to the VMs. `docker-machine ssh` is more like a one-touch mode; whereas `docker-machine env` is more like a interactive mode. because the later one is link the current shell to the VM's Docker daemon.  
 >so the next question is how to determine "where are you in?". It can be addressed using command `docker-machine ls` in the **ACTIVE** column, the `*` shows where you are. if all the column are `-`, then you are not in any VMs.
 
 **Accessing your cluster**
@@ -398,7 +398,7 @@ From here you can do everything you learned about in part2 and part3.
 
 Scale the app by changing the `docker-compose.yml` file
 
-You can join any mahine, physical and virtual, to this swarm, using the same `docker swarm join` command you used on `myvm2`, and capacity is added to your cluster. Just run `docker stack deploy` afterwards, and your app can take advantage of the new resources.
+You can join any machine, physical and virtual, to this swarm, using the same `docker swarm join` command you used on `myvm2`, and capacity is added to your cluster. Just run `docker stack deploy` afterwards, and your app can take advantage of the new resources.
 
 #### Cleanup and reboot
 
@@ -410,7 +410,7 @@ You can tear down the stack with `docker stack rm`. for example:
 
 As for swarms in the VMs, you can use `docker swarm leave` for workers and `docker swarm leave --force` for the last manager.
 
-**Unsetting docker-machine shell varibale settings**
+**Unsetting docker-machine shell variable settings**
 
 You can unset the `docker-machine` environment variables in your current shell with the given command.
 
@@ -424,7 +424,7 @@ On **Windows** the command is :
     
 when you run `docker-machine env -u` command on windows, you will get the above command at the end of the result.
 
-**Restarting Dcoker machines**
+**Restarting Docker machines**
 
 You can stop the docker machine using command `docker-machine stop <machine-name>`
 
@@ -447,13 +447,13 @@ To restart a machine that's stopped, run:
 #### Recap and cheat sheet
 [Here is the terminal recording of what was covered on this part.](https://asciinema.org/a/113837)
 
-In part4 you learned what a swarm is, how nodes in swarms can be managers or workers, created a swarm, and deployed an applocation on it. You saw that core Docker commands didn't change from part 3, they just had to be targeted to run on a swarm master. You also saw the power of Docker's networking in action, which kept load-balancing requests across containers, even though they were running on different machines. Finally, you learned how to iterate and scale your app on a cluster.
+In part4 you learned what a swarm is, how nodes in swarms can be managers or workers, created a swarm, and deployed an application on it. You saw that core Docker commands didn't change from part 3, they just had to be targeted to run on a swarm master. You also saw the power of Docker's networking in action, which kept load-balancing requests across containers, even though they were running on different machines. Finally, you learned how to iterate and scale your app on a cluster.
 
 Here are some commands you might like to run to interact with your swarm and your VMs a bit:
 
     docker-machine create --driver virtualbox myvm1     # create a VM (Mac,Win7, Linux)
     docker-machine create -d hyperv --hyperv-virtual-switch "myswitch" myvm1    # Win10
-    docker-machine env myvm1    # view basick information about node
+    docker-machine env myvm1    # view basic information about node
     docker-machine ssh myvm1 "docker node ls"       # inspect a node
     docker-machine ssh myvm1 "docker node inspect <node ID>
     docker-machine ssh myvm1 "docker swarm join-token -q worker"    #view join token
@@ -478,7 +478,7 @@ Here are some commands you might like to run to interact with your swarm and you
 **Introduction**
 
 Here in part5, you reach the top of the hierarchy of distributed applications:
- the **stack**. A stack is a group of interrelated services that share dependencies, and can be orchestrated and scaled together. A single stack is capable of defining and coordinating the funcitonality of an entir application(though very complex applications may want to use multiple stacks)
+ the **stack**. A stack is a group of interrelated services that share dependencies, and can be orchestrated and scaled together. A single stack is capable of defining and coordinating the functionality of an entire application(though very complex applications may want to use multiple stacks)
 
  Some good news is, you have technically been working with stacks since part3, when you created a Compose file and used `docker stack deploy`. But that was a single service stack running on a single host, which is not usually what takes place in production. Here, you can take what you've learned, make multiple services relate to each other, and run them on multiple machines. 
 
@@ -488,40 +488,40 @@ It's easy to add services to our `docker-compose.yml` file. First, let's add a f
 
 1. Modify the `docker-compose.yml` file, add `visualizer` to the services.
 
-```  
-version: "3"
-services:
-  web:
-    image: srealzhang/aiixm:part2
-    deploy:
-      replicas: 5
-      resources: 
-        limits:
-          cpus: "0.1"
-          memory: 50M
-      restart_policy:
-        condition: on-failure
-    ports:
-      - "4000:80"
+    ```  
+    version: "3"
+    services:
+    web:
+        image: srealzhang/aiixm:part2
+        deploy:
+        replicas: 5
+        resources: 
+            limits:
+            cpus: "0.1"
+            memory: 50M
+        restart_policy:
+            condition: on-failure
+        ports:
+        - "4000:80"
+        networks:
+        - webnet
+    visualizer:
+        image: dockersamples/visualizer:stable
+        ports:
+        - "8000:8000"
+        volumes:
+        - "/var/run/docker.sock:/var/run/docker.sock"
+        deploy:
+        placement:
+            constraints: [node.role == manager]
+        networks: 
+        - webnet
     networks:
-      - webnet
-  visualizer:
-    image: dockersamples/visualizer:stable
-    ports:
-      - "8000:8000"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-    networks: 
-      - webnet
-networks:
-  webnet:
-```
+    webnet:
+    ```
 The only thing new here is the peer service to `web`, named `visualizer`.Notice two new thins here: a `volumes` key, giving the visualizer access to the host's socket file for Docker, and a `placement` key, ensuring that this service only ever runs on a swarm manager -- never a worker. That's because this container, built from an open source project created by Docker, displays Docker services running on a swarm in a diagram.
 
-2. Make sure your shell is configured to talk to `myvm1`
+1. Make sure your shell is configured to talk to `myvm1`
    - Run `docker-machine ls` to list machines and make sure you are connected to `myvm1`, as indicated by an asterisk next to it.
    - if needed, re-run `docker-machine env myvm1`, then run the given command to configure the shell.
      - On **Mac or Linux** the command is:
@@ -532,7 +532,7 @@ The only thing new here is the peer service to `web`, named `visualizer`.Notice 
         ```
         $ & "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression
         ```
-3. Re-run the `docker stack deploy` command on the manager, and whatever services need updating are updated:
+2. Re-run the `docker stack deploy` command on the manager, and whatever services need updating are updated:
     ```
     $ docker stack deploy -c docker-compose.yml getstartedlab
 
@@ -540,6 +540,62 @@ The only thing new here is the peer service to `web`, named `visualizer`.Notice 
     Creating service getstartedlab_visualizer
     ```
 
-4. Take a look at the visualizer.
+3. Take a look at the visualizer.
 <img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-visualizer.png">
 
+The single copy of `visualizer` is running on the manager as you expected, and 4 instances of `web` are spread out across the swarm. You can testify this visualization by running `docker stack ps <stack>`
+
+    docker stack ps getstartedlab
+
+The visualizer is a standalone service that can run in any app that includes it in the stack. It doesn't depend on anything else. Now let's create a service that does have a dependency: the Redis service that provides a visitor counter.
+
+**Persist the data**
+
+1. Add a Redis service. 
+   
+    ```
+    version: "3"
+    services:
+    web:
+        image: srealzhang/aiixm:part2
+        deploy:
+        replicas: 4
+        resources: 
+            limits:
+            cpus: "0.1"
+            memory: 50M
+        restart_policy:
+            condition: on-failure
+        ports:
+        - "4000:80"
+        networks:
+        - webnet
+    visualizer:
+        image: dockersamples/visualizer:stable
+        ports:
+        - "8080:8080"
+        volumes:
+        - "/var/run/docker.sock:/var/run/docker.sock"
+        deploy:
+        placement:
+            constraints: [node.role == manager]
+        networks: 
+        - webnet
+    redis:
+        image: redis
+        ports:
+        - "6379:6379"
+        volumes:
+        - "/home/docker/data:/data"
+        deploy:
+        placement:
+            constraints: [node.role == manager]
+        command: redis-server --appendonly yes
+        networks: 
+        - webnet
+    networks:
+    webnet:
+
+    ```
+
+Redis has an official image in the Docker library and has been granted the short `image` name of just `redis`, so no `username/repo` notation here. The Redis port, 6379, has been pre-configured by Redis to be exposed from the container to the host, and here in Compose file we expose it from the host to the world, so you can actually enter the IP for any of your nodes
