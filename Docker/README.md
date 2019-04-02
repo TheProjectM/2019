@@ -631,8 +631,17 @@ You are ready to deploy your new Redis-using stack.
 
 
 6.Check the web page at one of your nodes. and take a look at the results of the visitor counter, which is now live and storing information on Redis.
+
 <img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-redis.png">
 
-Also check the visualizer of the manager node.
+
+Also check the visualizer on either node's IP address, and notice the `redis` service running along with the `web` and `visualizer` services.
+
 <img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-visualizer-with-redis.png">
 
+#### Recap
+
+[Here's a terminal recording of what covered on this page:](https://asciinema.org/a/113840)
+
+Now you have learned that stacks are inter-related services all running in concert, and that -- surprise! -- you have been using stacks since part three of this tutorial. You learned that to add more services to your stack, you insert them in your Compose file.
+Finally, you learned that by using a combination of placement constraints and volumes you can create a permanent home for persisting data, so that your app's data survives when the container is torn down and redeployed.
