@@ -473,3 +473,73 @@ Here are some commands you might like to run to interact with your swarm and you
     docker-machine stop $(docker-machine ls -q)     # stop all running VMs
     docker-machine rm $(docker-machine ls -q)       # delete all VMs and their task images
 
+### **Part5: Stacks**
+
+**Introduction**
+
+Here in part5, you reach the top of the hierarchy of distributed applications:
+ the **stack**. A stack is a group of interrelated services that share dependencies, and can be orchestrated and scaled together. A single stack is capable of defining and coordinating the funcitonality of an entir application(though very complex applications may want to use multiple stacks)
+
+ Some good news is, you have technically been working with stacks since part3, when you created a Compose file and used `docker stack deploy`. But that was a single service stack running on a single host, which is not usually what takes place in production. Here, you can take what you've learned, make multiple services relate to each other, and run them on multiple machines. 
+
+**Add a new service and redeploy**
+
+It's easy to add services to our `docker-compose.yml` file. First, let's add a free visualizer service that lets us look at how our swarm is scheduling containers.
+
+1. Modify the `docker-compose.yml` file, add `visualizer` to the services.
+
+```  
+version: "3"
+services:
+  web:
+    image: srealzhang/aiixm:part2
+    deploy:
+      replicas: 5
+      resources: 
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "4000:80"
+    networks:
+      - webnet
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8000:8000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks: 
+      - webnet
+networks:
+  webnet:
+```
+The only thing new here is the peer service to `web`, named `visualizer`.Notice two new thins here: a `volumes` key, giving the visualizer access to the host's socket file for Docker, and a `placement` key, ensuring that this service only ever runs on a swarm manager -- never a worker. That's because this container, built from an open source project created by Docker, displays Docker services running on a swarm in a diagram.
+
+2. Make sure your shell is configured to talk to `myvm1`
+   - Run `docker-machine ls` to list machines and make sure you are connected to `myvm1`, as indicated by an asterisk next to it.
+   - if needed, re-run `docker-machine env myvm1`, then run the given command to configure the shell.
+     - On **Mac or Linux** the command is:
+        ```
+        $ docker-machine env myvm1
+        ```
+     - On **Windows** the command is:
+        ```
+        $ & "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression
+        ```
+3. Re-run the `docker stack deploy` command on the manager, and whatever services need updating are updated:
+    ```
+    $ docker stack deploy -c docker-compose.yml getstartedlab
+
+    Updating service getstartedlab_web (id: tw44nisqvmhxrb05ntnxv5j23)
+    Creating service getstartedlab_visualizer
+    ```
+
+4. Take a look at the visualizer.
+<img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-visualizer.png">
+
