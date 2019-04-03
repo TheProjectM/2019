@@ -645,3 +645,11 @@ Also check the visualizer on either node's IP address, and notice the `redis` se
 
 Now you have learned that stacks are inter-related services all running in concert, and that -- surprise! -- you have been using stacks since part three of this tutorial. You learned that to add more services to your stack, you insert them in your Compose file.
 Finally, you learned that by using a combination of placement constraints and volumes you can create a permanent home for persisting data, so that your app's data survives when the container is torn down and redeployed.
+
+
+### Part6: Deploy your app
+
+**Introduction**
+
+You've been editing the same Compose file for this entire tutorial. Well, we have good news. That Compose file works just as well in production as it does on your section, we will go through some options for running your Dockerized application.
+
