@@ -1,8 +1,6 @@
-# **Docker**
+# **Get started with Docker**
 
-## **Get started with Docker**
-
-### **Part1: Orientation**
+## **Part1: Orientation**
 
 - check docker version  
     **`docker --version`**
@@ -71,7 +69,7 @@
     11a68cfa5d90        hello-world         "/hello"            About an hour ago   Exited (0) About an hour ago                       youthful_heisenberg
     ```
 
-#### recap and cheat sheet
+### recap and cheat sheet
 
     list docker commands 
         docker 
@@ -93,9 +91,9 @@
         docker container ls (-a/-all) 
         docker container ks -aq
 
-### **Part2: Containers**
+## **Part2: Containers**
 
-For Flask demo
+###For Flask demo
 1. define a container with `Dockerfile`
 2. create the `requirements.txt`
 3. create `app.py`
@@ -106,7 +104,7 @@ For Flask demo
 8. use `docker container ls` to list the running containers.
 9. stop docker container using `docker container stop <CONTAINER ID>`
 
-Share image
+###Share image
 1. You will need a Docker account, sign up one at [hub.docker.com](https://hub.docker.com/)
 2. Login docker with `docker login` and code in the username and password.
 3. Tag the image: the syntax of the command is `docker tag image username/repository:tag`, this step is just for associating the local image with a repository on a registry, after the previous command is done, you can use the `docker image ls` command to see the newly tagged image `username/repository  tag`
@@ -114,7 +112,7 @@ Share image
 5. Pull and run the image from remote repository: now you can run your app using `docker run -p 4000:80 username/repository:tag`.
 6. no matter where docker run executes, it pulls your image. along with Python and all the dependencies from `requirements.txt`, and run your code. it all travels together in a neat little package, and you don't need to install anything on the host machine for Docker to run it.
 
-#### Recap and cheat sheet
+### Recap and cheat sheet
 
 [Here is the terminal recording of what was covered on this page](https://asciinema.org/a/blkah0l4ds33tbe06y4vkme6g)
 
@@ -137,19 +135,19 @@ Here is a list of basic Docker commands from part2, and some related ones if you
     docker push username/repository:tag     # upload tagged image to username/repository:tag
     docker run username/repository:tag     # run image from a registry
 
-### **Part3: Services**
+## **Part3: Services**
 
-#### Introduction
+### Introduction
 
 In this part, we scale application and enable load-balancing. To do this, we need to go one level up in the hierarchy of a distributed application: the service.
 
-#### About services
+### About services
 
 In a distributed application, different pieces of the app are called "services".  
 Services are really just "containers in production". A service only run one image.  
 It's easy to define, run, and scale services with the Docker platform -- just write a `docker-compose.yml` file.
 
-#### Your first `docker-compose.yml` file
+### Your first `docker-compose.yml` file
 
 A `docker-compose.yml` file is a YAML file that defines how Docker containers should behave in production.
 
@@ -176,7 +174,7 @@ networks:
   webnet:
 ```
 
-#### Run your new load-balance app
+### Run your new load-balance app
 
 Before we can use the `docker stack deploy` command we first run:
 
@@ -210,7 +208,7 @@ To view all tasks of a stack, you can run `docker stack ps <stack_name/app_name>
 
     docker stack ps getstartedlab
 
-#### Scale the app
+### Scale the app
 
 You can scale the app by changing the `replicas` value in docker-compose.yml, saving the change, and re-running the `docker stack deploy` command :
 
@@ -218,7 +216,7 @@ You can scale the app by changing the `replicas` value in docker-compose.yml, sa
 
 Docker performs an in-place update, no need to tear down first or kill any containers.
 
-#### Tear down the app and the swarm
+### Tear down the app and the swarm
 
 - Take the app down with `docker stack rm`:
   
@@ -230,7 +228,7 @@ Docker performs an in-place update, no need to tear down first or kill any conta
 
 It's as easy as that to stand up and scale your app with Docker.
 
-#### Recap and cheat sheet
+### Recap and cheat sheet
 [Here's a terminal recording of what was covered on part3: Services](https://asciinema.org/a/b5gai4rnflh7r0kie01fx6lip)
 
 To recap, typing `docker run` is simple enough, the true implementation of a container in production is running it as a service. Services codify a container's behavior in a Compose file, and this file can be used to scale, limit, and redeploy our app, Changes to the service can be applied in place, as it runs, using the same command that launched the service:
@@ -247,15 +245,15 @@ Some commands to explore at this stage:
     docker swarm leave --force     # Tear down a single node swarm from the manager.
 
 
-### **Part4: Swarm**
+## **Part4: Swarm**
 
-#### Introduction
+### Introduction
 
 In part3, you took an app you wrote in part2, and defined how it should run in production by turning it into a service, scaling it up to 5x in the process.
 
 Here in part4, you deploy this application onto a cluster, running it on multiple machines.Multi-container, multi-machine applications are made possible by joining multiple machines into a "Dockerized" cluster called a **swarm**.
 
-#### Understanding Swarm clusters
+### Understanding Swarm clusters
 
 A swarm is a group of machines that are running Docker and joined into a cluster. After that has happened, you continue to run the Docker commands you're used to, but how they are executed on a cluster by a **swarm manager**. The machines in a swarm can be physical or virtual. After joining a swarm, they are referred to as **nodes**.
 
@@ -267,7 +265,7 @@ Workers are just there to provide capacity and do not have the authority to tell
 
 Up until now, you have been using Docker in s single-host mode on your local machine. But Docker also can be switched into **swarm mode**, and that is what enables the use of swarms. Enabling swarm mode instantly makes the current machine a swarm manager. From then on, Docker runs the commands you execute on the swarm you are managing, rather than just on the current machine.
 
-#### Set up your swarm
+### Set up your swarm
 
 A swarm is made up of multiple nodes, which can be physical and virtual machines. The basic concept is simple enough: run `docker swarm init` to enable swarm mode and make your current machine a swarm manager, then run `docker swarm join` on other machines to have them join the swarm as workers. 
 
@@ -400,7 +398,7 @@ Scale the app by changing the `docker-compose.yml` file
 
 You can join any machine, physical and virtual, to this swarm, using the same `docker swarm join` command you used on `myvm2`, and capacity is added to your cluster. Just run `docker stack deploy` afterwards, and your app can take advantage of the new resources.
 
-#### Cleanup and reboot
+### Cleanup and reboot
 
 **Stacks and swarms**
 
@@ -444,7 +442,7 @@ To restart a machine that's stopped, run:
     docker-machine start <machine-name>
 
 
-#### Recap and cheat sheet
+### Recap and cheat sheet
 [Here is the terminal recording of what was covered on this part.](https://asciinema.org/a/113837)
 
 In part4 you learned what a swarm is, how nodes in swarms can be managers or workers, created a swarm, and deployed an application on it. You saw that core Docker commands didn't change from part 3, they just had to be targeted to run on a swarm master. You also saw the power of Docker's networking in action, which kept load-balancing requests across containers, even though they were running on different machines. Finally, you learned how to iterate and scale your app on a cluster.
@@ -473,16 +471,16 @@ Here are some commands you might like to run to interact with your swarm and you
     docker-machine stop $(docker-machine ls -q)     # stop all running VMs
     docker-machine rm $(docker-machine ls -q)       # delete all VMs and their task images
 
-### **Part5: Stacks**
+## **Part5: Stacks**
 
-**Introduction**
+### Introduction
 
 Here in part5, you reach the top of the hierarchy of distributed applications:
  the **stack**. A stack is a group of interrelated services that share dependencies, and can be orchestrated and scaled together. A single stack is capable of defining and coordinating the functionality of an entire application(though very complex applications may want to use multiple stacks)
 
  Some good news is, you have technically been working with stacks since part3, when you created a Compose file and used `docker stack deploy`. But that was a single service stack running on a single host, which is not usually what takes place in production. Here, you can take what you've learned, make multiple services relate to each other, and run them on multiple machines. 
 
-**Add a new service and redeploy**
+### Add a new service and redeploy
 
 It's easy to add services to our `docker-compose.yml` file. First, let's add a free visualizer service that lets us look at how our swarm is scheduling containers.
 
@@ -549,7 +547,7 @@ The single copy of `visualizer` is running on the manager as you expected, and 4
 
 The visualizer is a standalone service that can run in any app that includes it in the stack. It doesn't depend on anything else. Now let's create a service that does have a dependency: the Redis service that provides a visitor counter.
 
-**Persist the data**
+### Persist the data
 
 1.Add a Redis service. 
    
@@ -639,7 +637,7 @@ Also check the visualizer on either node's IP address, and notice the `redis` se
 
 <img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-visualizer-with-redis.png">
 
-#### Recap
+### Recap
 
 [Here's a terminal recording of what covered on this page:](https://asciinema.org/a/113840)
 
@@ -647,9 +645,9 @@ Now you have learned that stacks are inter-related services all running in conce
 Finally, you learned that by using a combination of placement constraints and volumes you can create a permanent home for persisting data, so that your app's data survives when the container is torn down and redeployed.
 
 
-### Part6: Deploy your app
+## Part6: Deploy your app
 
-**Introduction**
+### Introduction
 
 You've been editing the same Compose file for this entire tutorial. Well, we have good news. That Compose file works just as well in production as it does on your section, we will go through some options for running your Dockerized application.
 
