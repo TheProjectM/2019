@@ -651,3 +651,79 @@ Finally, you learned that by using a combination of placement constraints and vo
 
 You've been editing the same Compose file for this entire tutorial. Well, we have good news. That Compose file works just as well in production as it does on your section, we will go through some options for running your Dockerized application.
 
+### Docker Engine-Community
+
+**Install Docker Engine-Community**
+
+[Install instructions for Docker Engine-Community](https://docs.docker.com/install/#supported-platforms) on the platform of your choice(normally at this stage you should have already installed the docker-ce or docker-ee).
+
+**Create your swarm**
+
+Run `docker swarm init` to create a swarm on the node.
+
+**Deploy your app**
+
+Run `docker stack deploy -c docker-compose.yml getstartedlab` to deploy the app on the swarm(be careful when dealing with redis service).
+
+    $ docker stack deploy -c docker-compose.yml getstartedlab
+
+
+```
+Creating network getstartedlab_webnet
+Creating service getstartedlab_visualizer
+Creating service getstartedlab_redis
+Creating service getstartedlab_web
+```
+
+now app is running.
+
+**Run some commands to verify the deployment**
+
+- use `docker node ls` to list nodes in your swarm.
+  
+    $ docker node ls 
+    ```
+    ID                            HOSTNAME                STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+    laps9kobp5tr5jr82eb62qadr *   linuxkit-00155d160109   Ready               Active              Leader              18.09.2
+    ```
+- use `docker service ls` to list the services.
+
+    $ docker service ls
+    ```
+    ID                  NAME                       MODE                REPLICAS            IMAGE                             PORTS
+    ks62yo92sq5m        getstartedlab_redis        replicated          1/1                 redis:latest                      *:6379->6379/tcp
+    sarderq6lijy        getstartedlab_visualizer   replicated          1/1                 dockersamples/visualizer:stable   *:8080->8080/tcp
+    oq3w2256xwew        getstartedlab_web          replicated          2/2                 srealzhang/aiixm:part2            *:4000->80/tcp
+    ```
+- use `docker service ps <service-ID>` to list the tasks of one or more services.
+
+    $ docker service ps oq3w2256xwew
+    ```
+    ID                  NAME                  IMAGE                    NODE                    DESIRED STATE       CURRENT STATE         ERROR               PORTS
+    wyskxhn2kqer        getstartedlab_web.1   srealzhang/aiixm:part2   linuxkit-00155d160109   Running             Running 4 hours ago
+    5hhue9suoz25        getstartedlab_web.2   srealzhang/aiixm:part2   linuxkit-00155d160109   Running             Running 4 hours ago
+    ```
+
+**Iteration and cleanup**
+
+From here you can do everything you learned about in previous parts of the tutorial.
+- Scale the app by changing the `docker-compose.yml` file and redeploy on-the-fly with the `docker stack deploy` command.
+- Change the app behavior by editing code, then rebuild, and push the new image.
+- You can tear down the stack with `docker stack rm` command. For example:
+
+    docker stack rm getstartedlab
+
+Unlike the scenario where you were running the swarm on local Docker machine VMs, your swarm and any apps deployed on it continue to run on cloud servers regardless of whether you shutdown your local host.
+
+### Congratulations
+
+You have taken a full-stack, dev-to-deploy tour of the entire Docker platform.
+
+There is much more to the Docker platform than what covered here, but you have a good idea of the basics of containers, images, services, swarms, stacks, scaling, load-balancing, volumes, and placement constraints.
+
+Want to go deeper? Here are some resources we recommend:
+- [Samples](https://docs.docker.com/samples/): Our samples include multiple examples of popular software running in containers, and some good labs that teach best practices.
+- [User Guide](https://docs.docker.com/config/daemon/): The user guide has several examples that explain networking and storage in greater depth than was covered here.
+- [Admin Guide](https://docs.docker.com/config/daemon/): Covers how to manage a Dockerized production environments.
+- [Training](https://success.docker.com/training): Official Docker courses that offer in-person instruction and virtual classroom environments.
+- [Blog](https://blog.docker.com/): Covers what's going on with Docker lately.
