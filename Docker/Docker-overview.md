@@ -29,7 +29,7 @@ The daemon create and manage Docker *objects*, such as images, containers, netwo
 
 > **Note:** Docker is licensed under the open source Apache 2.0 license.
 
-For more details, see [Docker Architecture](https://github.com/TheProjectM/2019/blob/master/Docker/Docker-overview.md#what-can-i-use-docker-for) below.
+For more details, see [Docker Architecture](https://github.com/TheProjectM/2019/blob/master/Docker/Docker-overview.md#docker-architecture) below.
 
 ## What can I use Docker for?
 
@@ -48,3 +48,11 @@ Consider the following example scenario:
 Docker's container-based platform allows for highly portable workloads. Docker containers can run on a developer's local laptop, on physical or virtual machines in a data center, on cloud providers, or in a mixture of environments.
 
 Docker's portability and lightweight nature also make it easy to dynamically manage workloads, scaling up or tearing down applications and services as business needs dictate, in near real time.
+
+**Running more workloads on the same hardware**
+
+Docker is lightweight and fast. It provides a viable, cost-effective alternative to hypervisor-based virtual machines, so you can use more of your compute capacity to achieve your business goals. Docker is perfect for high density environments and for small and medium deployments where you need to do more with fewer resources.
+
+## Docker architecture
+
+Docker uses a client-server architecture. The Docker client talks to the Docker daemon, which does the heavy lifting of building, running, and distributing your /docker containers. The Docker client and daemon can run on the same system, or you can connect a Docker client to a remote Docker daemon. The Docker client and daemon communicate using a REST API, over UNIX sockets or a network interface.
