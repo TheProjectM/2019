@@ -29,7 +29,7 @@ The daemon create and manage Docker *objects*, such as images, containers, netwo
 
 > **Note:** Docker is licensed under the open source Apache 2.0 license.
 
-For more details, see [Docker Architecture]() below.
+For more details, see [Docker Architecture](https://github.com/TheProjectM/2019/blob/master/Docker/Docker-overview.md#what-can-i-use-docker-for) below.
 
 ## What can I use Docker for?
 
