@@ -77,13 +77,13 @@ When you use `docker pull` or `docker run` commands, the required images are pul
 
 When you use Docker, you are creating and using images, containers, networks, volumes, plugins, and other objects. This section is a brief overview of some of those objects.
 
-1. **Image**
+1.**Image**
 
 An image is a read-only template with instructions for creating a Docker container. Often, an image is based on another image, with some additional customization. For example, you may build an image which is based on the `ubuntu` image, but installs the Apache web server and your application, as well as the configuration details needed to make your application run.
 
 You might create your own images or you might only use those created by others and published in a registry. To build your own image, you create a Dockerfile with a simple syntax for defining the steps needed to create the image and run it. Each instructions in a Dockerfile creates a layer in the image. When you change the Dockerfile and rebuild the image, only those layers which have changed are rebuilt. This is part of what makes images so lightweight, small, and fast, when compared to other virtualization technologies.
 
-2. **Containers**
+2.**Containers**
 
 A container is a runnable instance of an image. You can create, start, stop, move, or delete a container using the Docker API or CLI. You can connect a container to one or more networks, attach storage to it, or even create a new image based on its current state.
 
@@ -102,7 +102,7 @@ When you run this command, the following happens(assuming you are using the defa
     5. Docker starts the container and executes `/bin/bash`. Because the container is running interactively and attached to you terminal(due to the `-i` and `-t` flags), you can provide input using your keyboard while the output is logged to your terminal.
     6. When you type `exit` to terminate the `/bin/bash` command, the container stops but is not removed.You can start it again or remove it.
 
-3. Services
+3.**Services**
 
 Services allow you to scale containers across multiple Docker daemons, which all work together as a swarm with multiple managers and workers. Each member of aswarm is a Docker daemon, and the daemons all communicate using the Docker API. A service allows you to define the desired state, such as the number of replicas of the service that must be available at any given time. By default, the service is load-balanced across all worker nodes. To the consumer, the Docker service appears to be a single application. Docker Engine supports swarm mode in Docker 1.12 and higher.
 
