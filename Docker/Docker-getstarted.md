@@ -387,7 +387,7 @@ You can access your app from the IP address of either `myvm1` or `myvm2`.
 The network you created is shared between then and load-balancing. Run `docker-machine ls` to get your VMs' IP addresses and visit either of them on a browser, hitting refresh you will get all the containers IDs with a load-balancing cycling.
 
 **Ingress routing mesh network explain**
-<img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/ingress-routing-mesh.png">
+<img src="./imgs/ingress-routing-mesh.png">
 
 
 **Iterating and scaling your app**
@@ -539,7 +539,7 @@ The only thing new here is the peer service to `web`, named `visualizer`.Notice 
     ```
 
 3. Take a look at the visualizer.
-<img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-visualizer.png">
+<img src="./imgs/docker-visualizer.png">
 
 The single copy of `visualizer` is running on the manager as you expected, and 4 instances of `web` are spread out across the swarm. You can testify this visualization by running `docker stack ps <stack>`
 
@@ -630,12 +630,12 @@ You are ready to deploy your new Redis-using stack.
 
 6.Check the web page at one of your nodes. and take a look at the results of the visitor counter, which is now live and storing information on Redis.
 
-<img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-redis.png">
+<img src="./imgs/docker-redis.png">
 
 
 Also check the visualizer on either node's IP address, and notice the `redis` service running along with the `web` and `visualizer` services.
 
-<img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/docker-visualizer-with-redis.png">
+<img src="./imgs/docker-visualizer-with-redis.png">
 
 ### Recap
 

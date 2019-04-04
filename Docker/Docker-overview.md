@@ -20,7 +20,7 @@ Docker provides tooling and platform to manage the lifecycle of your containers:
 - A REST API which specifies interfaces that programs can use to talk to the daemon and instruct it what to do.
 - A command line interface(CLI) client (the `docker` command).
   
-<img src="https://github.com/TheProjectM/2019/blob/master/Docker/imgs/engine-components-flow.png">
+<img src="./imgs/engine-components-flow.png">
 
 The CLI uses the Docker REST API to control or interact with the Docker daemon through scripting or direct CLI commands.
 Many other Docker applications use the underlying API and CLI.
@@ -29,7 +29,7 @@ The daemon create and manage Docker *objects*, such as images, containers, netwo
 
 > **Note:** Docker is licensed under the open source Apache 2.0 license.
 
-For more details, see [Docker Architecture](https://github.com/TheProjectM/2019/blob/master/Docker/Docker-overview.md#docker-architecture) below.
+For more details, see [Docker Architecture](./Docker-overview.md#docker-architecture) below.
 
 ## What can I use Docker for?
 
