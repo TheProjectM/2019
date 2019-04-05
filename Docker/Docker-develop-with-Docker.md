@@ -70,11 +70,11 @@ There are limitations around sharing data amongst nodes of a swarm service. If y
 
 **Difference in development and production environments**
 
-**Development** | **Production**
----|---
-Use bind mounts to give your container access to your source code. | Use volumes to store container data.
-User Docker Desktop for Mac or Docker Desktop for Windows. | Use Docker EE if possible, with userns mapping for grater isolation of Docker processes from processes.
-Don not worry about time drift. | Always run an NTP client on the Docker host and within each container process and sync them all to the same NTP server. If you use swarm services, also ensure that each Docker node syncs its clocks to the same time source as the containers.
+| **Development**                                                    | **Production**                                                                                                                                                                                                                                   |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Use bind mounts to give your container access to your source code. | Use volumes to store container data.                                                                                                                                                                                                             |
+| User Docker Desktop for Mac or Docker Desktop for Windows.         | Use Docker EE if possible, with userns mapping for grater isolation of Docker processes from processes.                                                                                                                                          |
+| Don not worry about time drift.                                    | Always run an NTP client on the Docker host and within each container process and sync them all to the same NTP server. If you use swarm services, also ensure that each Docker node syncs its clocks to the same time source as the containers. |
 
 
 ## **Develop images**
@@ -111,3 +111,27 @@ For more on image layers (and how Docker builds and stores image), see [About st
 The image defined by your `Dockerfile` should generate containers that are as ephemeral as possible. By "ephemeral", we mean that the container can be stopped and destroyed, then rebuilt and replaced with an absolute minimum set up and configuration.
 
 Refer to Process under **The Twelve-factor App** methodology to get a feel for the motivations of running containers in such a stateless fashion.
+
+**Understand build context**
+
+When you issue a `docker build` command, the current working directory is called the **build context**. By default, the Dockerfile is assumed to be located here, but you can specify a different location with the file flag `-f`. Regardless of where the `Dockerfilel` actually lives, all recursive contents of files and directories in the currnet directory are sent to the Docker daemon as the build context.
+
+> - [x] **Build context example**
+> Create a dir for the build context and `cd` into it. Write "hello" into a text file named `hello` and create a Dockerfile that runs `cat` on it. Build the image from within the build context (`.`):
+>   ```
+>   mkdir myproject && cd myproject
+>   echo "hello" > hello
+>   echo -e "FROM busybox\nCOPY /hello /\nRUN cat /hello" > Dockerfile
+>   docker build -t helloapp:v1 .
+>   ```
+> Move `Dockerfile` and `hello` into separate dirs and build a second version of the image(without relaying on cache from the last build). Use `-f` to point to the Dockerfile and specify the dir of the build context:
+>   ```
+>   mkdir -p dockerfiles context
+>   mv Dockerfile dockerfiles && mv hello context
+>   docker build --no-cache -t helloapp:v2 -f dockerfiles/Dockerfile context
+>
+
+Inadvertently including files that are not necessary for building an image results in a larger build context and larger image size. This can increase the time to build the image, time to pull and push it, and the container runtime size. To see how big your build context is, look for a message like this when building your `Dockerfile`:
+
+    Sending build context to Docker daemon 187.8MB
+
