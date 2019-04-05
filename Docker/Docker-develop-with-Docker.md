@@ -114,7 +114,7 @@ Refer to Process under **The Twelve-factor App** methodology to get a feel for t
 
 **Understand build context**
 
-When you issue a `docker build` command, the current working directory is called the **build context**. By default, the Dockerfile is assumed to be located here, but you can specify a different location with the file flag `-f`. Regardless of where the `Dockerfilel` actually lives, all recursive contents of files and directories in the currnet directory are sent to the Docker daemon as the build context.
+When you issue a `docker build` command, the current working directory is called the **build context**. By default, the Dockerfile is assumed to be located here, but you can specify a different location with the file flag `-f`. Regardless of where the `Dockerfile` actually lives, all recursive contents of files and directories in the current directory are sent to the Docker daemon as the build context.
 
 > - [x] **Build context example**
 > Create a dir for the build context and `cd` into it. Write "hello" into a text file named `hello` and create a Dockerfile that runs `cat` on it. Build the image from within the build context (`.`):
