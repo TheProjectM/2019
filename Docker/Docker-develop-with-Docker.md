@@ -61,3 +61,53 @@ There are a few rules of thumb to keep image size small:
 -   Let `docker stack deploy` handle any image pills for you, instead of using `docker pull`. This way, your deployment does npt try to pull from nodes that are down. Also, when nodes are added to the swarm, images are pulled automatically.
 
 There are limitations around sharing data amongst nodes of a swarm service. If you use Docker for AWS or Docker for Azure, you can use the Cloudstor plugin to share data amongst your swarm service nodes. You can also write your application data into a separate database which supports simultaneous updates.
+
+
+**Use CI/CD for testing and deployment**
+
+-   When you check a change into source control or create a pull request, use Docker Hub or another CI/CD pipeline to automatically build and tag a Docker image and test it.
+-   Take this even further with Docker EE by requiring your development, testing, and security teams to sign images before they can be deployed into production. This way, you can be sure that before an image is deployed into production, it has been tested and signed off by, for instance, development, quality, and security teams.
+
+**Difference in development and production environments**
+
+**Development** | **Production**
+---|---
+Use bind mounts to give your container access to your source code. | Use volumes to store container data.
+User Docker Desktop for Mac or Docker Desktop for Windows. | Use Docker EE if possible, with userns mapping for grater isolation of Docker processes from processes.
+Don not worry about time drift. | Always run an NTP client on the Docker host and within each container process and sync them all to the same NTP server. If you use swarm services, also ensure that each Docker node syncs its clocks to the same time source as the containers.
+
+
+## **Develop images**
+
+**Best practices for writing Dockerfiles**
+
+This document covers recommended best practices and methods for building efficient images.
+
+Docker builds images automatically by reading the instructions from a `Dockerfile` -- a text file that contains all commands, in order, needed to build a given image. A `Dockerfile` adheres to a specific format and set of instructions which you can find at [Dockerfile reference](https://docs.docker.com/engine/reference/builder/).
+
+A Docker image consists of read-only layers each of which represents a Dockerfile instruction. The layers are stacked and each one is a delta of the changes from the pervious layer.
+Consider this `Dockerfile`:
+
+    FROM ubuntu:18.04
+    COPY . /app
+    RUN make /app
+    CMD python /app/app.py
+
+Each instruction creates one layer:
+
+-   `FROM` creates a layer from the `ubuntu:18.04` Docker image.
+-   `COPY` adds file from your Docker client's current directory.
+-   `RUN` builds your application with `make`.
+-   `CMD` specifies what command to run within the container.
+
+When you run an image and generate a container, you add a new writable layer(the "container layer") on top of the underlying layers. All changes made to the running container, such as writing new files, modifying existing files, and deleting files, are written to this thin writable container layer.
+
+For more on image layers (and how Docker builds and stores image), see [About storage drivers](https://docs.docker.com/storage/storagedriver/).
+
+**General guidelines and recommendations**
+
+**Create ephemeral containers**
+
+The image defined by your `Dockerfile` should generate containers that are as ephemeral as possible. By "ephemeral", we mean that the container can be stopped and destroyed, then rebuilt and replaced with an absolute minimum set up and configuration.
+
+Refer to Process under **The Twelve-factor App** methodology to get a feel for the motivations of running containers in such a stateless fashion.
