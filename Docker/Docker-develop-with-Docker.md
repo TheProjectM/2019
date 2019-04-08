@@ -104,15 +104,15 @@ When you run an image and generate a container, you add a new writable layer(the
 
 For more on image layers (and how Docker builds and stores image), see [About storage drivers](https://docs.docker.com/storage/storagedriver/).
 
-#### **General guidelines and recommendations**
+### **General guidelines and recommendations**
 
-##### **Create ephemeral containers**
+#### **Create ephemeral containers**
 
 The image defined by your `Dockerfile` should generate containers that are as ephemeral as possible. By "ephemeral", we mean that the container can be stopped and destroyed, then rebuilt and replaced with an absolute minimum set up and configuration.
 
 Refer to Process under **The Twelve-factor App** methodology to get a feel for the motivations of running containers in such a stateless fashion.
 
-##### **Understand build context**
+#### **Understand build context**
 
 When you issue a `docker build` command, the current working directory is called the **build context**. By default, the Dockerfile is assumed to be located here, but you can specify a different location with the file flag `-f`. Regardless of where the `Dockerfile` actually lives, all recursive contents of files and directories in the current directory are sent to the Docker daemon as the build context.
 
@@ -134,4 +134,57 @@ When you issue a `docker build` command, the current working directory is called
 Inadvertently including files that are not necessary for building an image results in a larger build context and larger image size. This can increase the time to build the image, time to pull and push it, and the container runtime size. To see how big your build context is, look for a message like this when building your `Dockerfile`:
 
     Sending build context to Docker daemon 187.8MB
+
+#### **Pipe Docker file through `stdin`**
+
+Docker has the ability to build images by piping `Dockerfile` through `stdin` with a local or remote build context. Piping a `Dockerfile` through `stdin` can be useful to perform one-off builds without writing a Dockerfile to disk, or in situations where the `Dockerfile` is generated, and should not persist afterwards.
+
+### **Dockerfile instructions**
+
+These recommendations are designed to help you create an efficient and maintainable `Dockerfile`
+
+**From**
+
+Whenever possible, use current official images as the basis for your image. We recommend the Alpine image as it is tightly controlled and small in size(currently under 5MB), while still being a full Linux distribution.
+
+**RUN**
+
+Split long or complex `RUN` statements on multiple lines separated with backslashes to make your `Dockerfile` more readable, understandable, and maintainable.
+
+**APT-GET**
+
+Probably the most common use-case for `RUN` is an application of `apt-get`. Because it installs packages, the `RUN apt-get` command has several gotchas to look out for.
+
+Always combine `RUN apt-get update` with `apt-get install` in the same `RUN` statement. For example:
+
+    ```
+    Run apt-get update && apt-get install -y \
+        package-bar \
+        package-baz \
+        package-foo
+    ```
+**CMD**
+
+The `CMD` instruction should be used to run the software contained by your image, along with any arguments. `CMD` should almost always be used in the form of `CMD ["executable","param1","param2"...]
+
+
+**EXPOSE**
+
+The `EXPOSE` instruction indicates the ports on which a container listens for connections. Consequently, you should use the common, traditional port for your application. For example, an image containing the Apache web server would use `EXPOSE 80`, while an image containing MongoDB would use `EXPOSE 27017` and so on.
+
+**ENV**
+
+To make new software easier to run, you can use `ENV` to update the `PATH` environment variable for the software your container installs. For example,  `ENV PATH /usr/local/nginx/bin:$PATH` ensures that `CMD ["nginx"]` works.
+
+**ADD or COPY**
+
+Although `ADD` and `COPY` are functionally similar, generally speaking, `COPY` is preferred. That is because it is more transparent than `ADD`. `COPY` only supports the basic copying of local files into the container, while `ADD` has some features(like local-only tar extraction and remote URL support) that are not immediately obvious. Consequently, the best use for `ADD` is local tar file auto-extraction into the image, as in `ADD rootfs.tar.xz /`.
+
+**VOLUME**
+
+The `VOLUME` instruction should be used to expose any database storage area, configuration storage, or files/folders created by your docker container. You are strongly encouraged to use `VOLUME` for any mutable and/or user-serviceable parts of your image.
+
+**WORKDIR**
+
+For clarity and reliability, you should always use absolute paths for your `WORKDIR`. Also, you should use `WORKDIR` instead of proliferating instructions like `RUN cd ... && do-something`, which are hard to read, troubleshoot, and maintain.
 
