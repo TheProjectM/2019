@@ -188,3 +188,37 @@ The `VOLUME` instruction should be used to expose any database storage area, con
 
 For clarity and reliability, you should always use absolute paths for your `WORKDIR`. Also, you should use `WORKDIR` instead of proliferating instructions like `RUN cd ... && do-something`, which are hard to read, troubleshoot, and maintain.
 
+
+## **Create a base image**
+
+Most Dockerfiles start from a parent image. If you need to completely control the contents of your image, you might need to create a base image instead. Here's the difference:
+
+-   A parent image is the image that your image based on. It refers to the contents of the `FROM` directive in the Dockerfile. Each subsequent declaration in the Dockerfile modifies this parent image. Most Dockerfiles start from a parent image, rather than a base image. However, the terms are sometimes used interchangeably.
+-   A base image either has no `FROM` line in its Dockerfile, or has `FROM scratch`.
+
+This topic shows you several ways to create a base image. The specific process will depend heavily on the Linux distribution you want to package. We have some examples below, and you are encouraged to submit pull requests to contribute new ones.
+
+### **Create a full image using tar**
+
+In general, start with a working machine that is running the distribution you'd like to package as a parent image, though that is not required for some tools like Debian's Debootstrap, which you can also use to build Ubuntu images.
+
+It can be as simple as this to create an Ubuntu parent image:
+
+    $ sudo debootstrap xenial xenial > /dev/null
+    $ sudo tar -C xenial -c . | docker import - xenial
+
+    a29c15f1bf7a
+
+    $ docker run xenial cat /etc/lsb-release
+
+    DISTRIB_ID=Ubuntu
+    DISTRIB_RELEASE=16.04
+    DISTRIB_CODENAME=xenial
+    DISTRIB_DESCRIPTION="Ubuntu 16.04 LTS"
+
+There are more example scripts for creating parent images in the Docker GitHub Repo:
+-   BusyBox
+-   CentOS / Scientific Linux CERN (SLC) on Debian/Ubuntu or on CentOS/RHEL/SLC/etc.
+-   Debian / Ubuntu
+
+
