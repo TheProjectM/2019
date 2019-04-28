@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --fix-missing --no-install-recommends \
         libleveldb-dev \
         liblmdb-dev \
         libopencv-dev \
+        
         libprotobuf-dev \
         libsnappy-dev \
         protobuf-compiler \
