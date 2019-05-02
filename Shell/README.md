@@ -1,10 +1,10 @@
-# Unix shell programming tutorial.
+# **Unix shell programming tutorial.**
 
 What is shell?
 
     shell is basically an interface that we interact with the unix kernel.
 
-## Basic commands:
+## **Basic commands:**
 
 `who` command shows who is logged on.
 
@@ -145,3 +145,106 @@ What is shell?
 
     uncompress file.Z
 
+`echo` display a line of text
+
+    echo "Hello world"
+
+## **Scripting**
+
+`ss1.sh`
+
+    # This is a hello world shell script.
+    echo "Hello World"
+
+`ss2.sh`
+
+    # Order matters.
+    pwd 
+    ls -l
+    banner "The End"
+
+`ss3.sh`
+
+    # read input as a variable.
+    echo "Please enter your name"
+    read my_name
+    echo "Hello $my_name, It's a fine day."
+
+`ss4.sh`
+
+    # no need to specify the variable type.
+    a=25
+    echo $a
+    a="This is the string format"
+    echo $a
+
+    # This file takes a file name as an argument and rename it.
+    echo $0 $1 $2
+    mv $1 $2
+    cat $2
+
+    # rename file with interactive mode.
+    echo "Please enter the file name you wanted to rename."
+    read ori_name
+    echo "Please enter the new name."
+    read new_name
+    mv $ori_name $new_name
+    cat $new_name
+
+`ss5.sh`
+
+    chmod 744 $1
+    ls -l $1
+
+    # use set command to set positional parameters.
+    set a b c d e
+    echo $1
+    echo $2
+    echo $3
+    echo $4
+    echo $5
+    echo $*
+
+`ss6.sh`
+
+    # rename a file to file.name
+    # where name is the login name of the user executing this script.
+    file=$1
+    set `who`
+    mv $file $file.$1
+
+`ss7.sh`
+
+    # set `ls`  command can be replaced with * when run this command.
+    echo The total number of items in the current directory is $#
+
+`ss8.sh`
+
+    # Arithmetic operation
+    a=30 b=15
+    expr $a + $b
+    expr $a - $b
+    expr $a \* $b
+    expr $a / $b
+    expr $a % $b
+    expr $a \* \( $a + $b \) /$b
+
+`ss9.sh`
+
+    # Floating point Arithmetic
+    a=10.5 b=3.5
+    echo $a + $b | bc
+    echo $a - $b | bc
+    echo $a \* $b | bc
+    echo $a / $b | bc
+    echo $a % $b | bc
+
+`ss10.sh`
+
+    # Escape  sequences
+    echo "a b c \nd e f"
+    echo "oneee \rtwo"
+    echo "one \ttwo"
+    echo "one \btwo"
+    echo "\033[1mBold\033[0m"
+    echo "\033[7mHigh contrast\033[0m"
