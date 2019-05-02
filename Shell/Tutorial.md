@@ -87,3 +87,61 @@ What is shell?
     ln old new # hard link, make a replica. delete the old doesn't affect new
     ln -s old new # make a soft link delete old affects new.
 
+`ls` list directory contents.
+
+    ls # list contents 
+    ls -l # list contents with long information format.
+    ls -a # list all contents including the hidden files.
+
+`chmod` change file mode bits.
+
+    chmod 666 file # 4 for read, 2 for write, 1 for execute.
+    chmod [ugoa]*([-+=]([rwxXst]*|[ugo]))+|[-+=][0-7]+ files/dirs
+
+`file` determine file type.
+
+    file *
+
+`wc` print new line, word, and byte counts for each file.
+
+    wc file 
+    wc -l file # lines
+    wc -w file # words
+    wc -m file # characters
+
+`sort` sort lines of text files.
+
+    sort # input contents and use Ctrl+d finished.
+    sort file1 file2
+
+`cat` remove sections from each line of files.
+
+    cut -d"-" -f 1,3 players
+
+`dd` convert and copy files.
+
+    dd if=test of=put conv=ucase
+
+`man` an interface to the on-line reference manuals.
+
+    man man 
+    man ${command}
+
+`banner` print large banner.
+
+    banner What is banner
+    banner "What is banner"
+
+`compress` compress and expand data.
+
+    compress file
+    compress -v file
+
+`zcat` cat with zipped files.Z
+
+    zcat file.Z
+
+`uncompress` uncompress the zipped file.Z
+
+    uncompress file.Z
+
