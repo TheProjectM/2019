@@ -1,2 +1,3 @@
 Docker/Services/appendonly.aof
 .gitignore
+.vscode/settings.json
