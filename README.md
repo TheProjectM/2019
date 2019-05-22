@@ -12,7 +12,8 @@
 
 1. Docker
 2. Shell scripting
-3. JavaScript
-4. Kubernetes
-5. Vue
-6. Golang
+3. Kaggle
+4. JavaScript
+5. Kubernetes
+6. Vue
+7. Golang
