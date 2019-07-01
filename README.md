@@ -8,12 +8,21 @@
 
 [Shell scripting](./Shell)
 
+## **June**
+
+[Kaggle](./Kaggle)
+
+## **July**
+
+[Golang](./Golang)
+
+
 ### **wishlist**
 
 1. Docker
 2. Shell scripting
 3. Kaggle
-4. JavaScript
-5. Kubernetes
-6. Vue
-7. Golang
+4. Golang
+5. JavaScript
+6. Kubernetes
+7. Vue
