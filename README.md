@@ -26,3 +26,4 @@
 5. JavaScript
 6. Kubernetes
 7. Vue
+8. Flutter
