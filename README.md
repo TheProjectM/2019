@@ -22,8 +22,10 @@
 1. Docker
 2. Shell scripting
 3. Kaggle
-4. Golang
-5. JavaScript
-6. Kubernetes
-7. Vue
-8. Flutter
+4. Python
+5. OpenCV
+6. Golang
+7. JavaScript
+8. Kubernetes
+9.  Vue
+10. Flutter
