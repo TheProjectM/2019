@@ -14,7 +14,7 @@
 
 ## **July**
 
-[Golang](./Golang)
+Nothing
 
 
 ### **wishlist**
