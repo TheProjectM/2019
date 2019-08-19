@@ -16,6 +16,13 @@
 
 Nothing
 
+## **August**
+
+Nothing
+
+## **September**
+
+OpenCV
 
 ### **wishlist**
 
